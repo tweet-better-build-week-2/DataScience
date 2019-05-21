@@ -63,7 +63,7 @@ def process_tweet(tweet):
   sid = SentimentIntensityAnalyzer()
   scores = sid.polarity_scores(fin_tweet)
   
-  #todo: multiple return statements depending on scores
+  #return a message based on compound sentiment
   if scores['compound'] < float(-0.50):
     return print("Your tweet might be more negative than it reads to you now.\nIt has an overall sentiment score of "+str(scores['compound'])+".\n"+str(scores)+"\nDo you still want to send the tweet or should it be drafted?")
   elif scores['compound'] > float(0.50):
