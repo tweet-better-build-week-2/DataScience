@@ -1,6 +1,7 @@
 '''Functions for actions in the Tweet Better website.'''
-'''TODO: make process_tweetob that takes tweets from API. return score[compound].'''
-'''TODO: unicode cleaning code if necessary'''
+'''TODO: present the score (-1 to 1) as a percentage (0 is 50%)'''
+'''TODO: is it necessary on DS part to make a plot.ly graphing function?
+         To retrieve stuff from the API?'''
 
 #imports
 import string
@@ -18,7 +19,7 @@ from nltk.stem.wordnet import WordNetLemmatizer
 
 def process_tweet(tweet):
   '''converts a single tweet into a form understandable by predictor.'''
-  '''returns positive, neutral, negative score and message.'''
+  '''returns overall sentiment score between -1 and 1'''
   
   #nltk stopwords are words too common to be useful
   #not stopwords as in profanity
@@ -62,11 +63,28 @@ def process_tweet(tweet):
   #predict
   sid = SentimentIntensityAnalyzer()
   scores = sid.polarity_scores(fin_tweet)
+  score = scores['compound']
   
-  #return a message based on compound sentiment
-  if scores['compound'] < float(-0.50):
-    return print("Your tweet might be more negative than it reads to you now.\nIt has an overall sentiment score of "+str(scores['compound'])+".\n"+str(scores)+"\nDo you still want to send the tweet or should it be drafted?")
-  elif scores['compound'] > float(0.50):
-    return print("You're improving Twitter one tweet at a time!\nThis tweet has a highly positive sentiment score of "+str(scores['compound'])+".\n"+str(scores)+"\nSend now?")
+  return score
+
+
+def score_input(tweet):
+  '''for use when a user types a new tweet.'''
+  '''returns a statement depending on score.'''
+  score = process_tweet(tweet)
+  if score < float(-0.50):
+    return print("Your tweet might be more negative than it reads to you now.\nIt has an overall sentiment score of "+str(score*100)+"%.\nDo you still want to send the tweet or should it be drafted?")
+  elif score > float(0.50):
+    return print("You're improving Twitter one tweet at a time!\nThis tweet has a highly positive sentiment score of "+str(score*100)+"%.\nSend now?")
   else:
-    return print("This is a pretty neutral tweet, with an overall sentiment of "+str(scores['compound'])+".\n"+str(scores)+"\nSend now?")
+    return print("This is a pretty neutral tweet, with an overall sentiment of "+str(score)+".\nSend now?")
+  
+  
+def score_timeline(timeline):
+  '''for use when a user requests to evaluate entire timeline.'''
+  '''returns a list of scores (for graphing by time)'''
+ scores = []
+ for tweet in timeline:
+   score = process_tweet(tweet)
+   scores.append(score)
+ return scores
