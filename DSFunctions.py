@@ -16,7 +16,7 @@ from nltk.stem.wordnet import WordNetLemmatizer
 
 def process_tweet(tweet):
   '''converts a single tweet into a form understandable by predictor.'''
-  '''returns overall sentiment score between -1 and 1'''
+  '''returns sentiment score between 0 and 100'''
   
   #nltk stopwords are words too common to be useful
   #not stopwords as in profanity
