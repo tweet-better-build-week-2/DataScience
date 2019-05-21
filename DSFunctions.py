@@ -1,7 +1,4 @@
 '''Functions for actions in the Tweet Better website.'''
-'''TODO: present the score (-1 to 1) as a percentage (0 is 50%)'''
-'''TODO: is it necessary on DS part to make a plot.ly graphing function?
-         To retrieve stuff from the API?'''
 
 #imports
 import string
@@ -65,19 +62,19 @@ def process_tweet(tweet):
   scores = sid.polarity_scores(fin_tweet)
   score = scores['compound']
   
-  return score
+  return (score/2 + 1/2) * 100
 
 
 def score_input(tweet):
   '''for use when a user types a new tweet.'''
   '''returns a statement depending on score.'''
   score = process_tweet(tweet)
-  if score < float(-0.50):
-    return print("Your tweet might be more negative than it reads to you now.\nIt has an overall sentiment score of "+str(score*100)+"%.\nDo you still want to send the tweet or should it be drafted?")
-  elif score > float(0.50):
-    return print("You're improving Twitter one tweet at a time!\nThis tweet has a highly positive sentiment score of "+str(score*100)+"%.\nSend now?")
+  if score < float(25):
+    return print("Your tweet might be more negative than it reads to you now.\nIt has a sentiment score of "+str(score)+"%.\nDo you still want to send the tweet or should it be drafted?")
+  elif score > float(75):
+    return print("You're improving Twitter one tweet at a time!\nThis tweet has a highly positive sentiment score of "+str(score)+"%.\nSend now?")
   else:
-    return print("This is a pretty neutral tweet, with an overall sentiment of "+str(score)+".\nSend now?")
+    return print("This is a pretty neutral tweet, with a sentiment score of "+str(score)+"%.\nSend now?")
   
   
 def score_timeline(timeline):
